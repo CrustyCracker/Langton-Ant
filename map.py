@@ -3,17 +3,30 @@ from PIL import Image
 from random import randrange
 from ant import Langton_Ant
 import os
-
+import pathlib
 
 class ProcentageError(Exception):
     '''ProcentageError occurs when the user inputs odds
     that isn't an element of set [0, 100].
     Attributes:
-    -procentage, input by the user
+    -procentage, users input
     '''
     def __init__(self, percentage):
         self.percentage = percentage
-        super().__init__(f'the percantage of black square appearing cannot be equal to {percentage}%')
+        msg = f'the percantage of black square appearing cannot be equal to {percentage}%'
+        super().__init__(msg)
+
+
+class StepValueError(Exception):
+    '''StepValueError occurs when the user inputs some string that
+    is not convertable to an integer
+    Attributes:
+    -string, users input
+    '''
+    def __init__(self, user_string):
+        self.user_string = user_string
+        msg = f'the number of steps cannot be equal to {user_string}'
+        super().__init__(msg)
 
 
 class SizeError(Exception):
@@ -63,7 +76,8 @@ class Map():
         odds_of_black=None,
         img_path=None
     ):
-        # TODO 2 more map creators: random and from photo
+        # TODO 2 more map creators: random and from photo(done)
+        # TODO change the paths???
         if creator_code == 'from_photo':
             self._array = self._create_map_from_image(img_path)
             self._height, self._width = self._array.shape
@@ -98,7 +112,7 @@ class Map():
     def _create_directory(self, save_dir):
         # TODO use PathLib
         '''Creates a directory, if directory already exists,
-        it deletes the contents of the dir
+        it deletes the contents of the directory
         '''
         parent_dir = os.getcwd()
         path = os.path.join(parent_dir, save_dir)
@@ -127,6 +141,11 @@ class Map():
         return randrange(100) < odds_of_black
 
     def _create_map_from_image(self, path):
+        '''Yes, this looks odd, but there are some problems
+        with creating images form the '1' mode, so I decided to use
+        'L' mode, to do so, the program has to perform this operation
+        (see below). It just works.
+        '''
         with Image.open(f'{path}') as image:
             function = lambda x: 255 if x > 122 else 0
             image = image.convert('L').point(function, mode='1')
@@ -134,16 +153,21 @@ class Map():
             array = np.array(image)
             return array
 
-    def ants_journey(self, steps):
-
+    def ants_journey(self, steps, save_every_step=True):
+        try:
+            steps = abs(int(float(steps)))
+        except Exception:
+            raise StepValueError(steps)
         for step in range(0, steps+1):
-            self.save_map(step=step)
+            if save_every_step:
+                self.save_map(step=step)
             ant_xpos = self._ant.xpos()
             ant_ypos = self._ant.ypos()
             self._array[ant_ypos][ant_xpos] = self._ant.step(self._array[ant_ypos][ant_xpos])
-        return
 
     def save_map(self, directory=None, step=None):
+        '''Saves current map to a given directory
+        '''
         if not directory:
             directory = self._save_dir
         # converts to '1' so less space is taken

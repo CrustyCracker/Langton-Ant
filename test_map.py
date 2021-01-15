@@ -70,3 +70,10 @@ def test_create_map_random_too_high():
     odds = '101'
     with pytest.raises(ProcentageError):
         map = Map(width, height, creator_code, odds_of_black=odds)
+
+def test_create_map_from_photo_nonexistant():
+    width = '10'
+    height = '10'
+    creator_code = 'from_photo'
+    with pytest.raises(FileNotFoundError):
+        map = Map(width, height, creator_code, 'w/e', img_path='nonexistant_PHOTO')
