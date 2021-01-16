@@ -3,7 +3,6 @@ from PIL import Image
 from random import randrange
 from ant import Langton_Ant
 import os
-import pathlib
 
 class ProcentageError(Exception):
     '''ProcentageError occurs when the user inputs odds
@@ -110,7 +109,6 @@ class Map():
         self._save_dir = save_dir
 
     def _create_directory(self, save_dir):
-        # TODO use PathLib
         '''Creates a directory, if directory already exists,
         it deletes the contents of the directory
         '''
@@ -160,7 +158,7 @@ class Map():
             raise StepValueError(steps)
         for step in range(0, steps+1):
             if save_every_step:
-                self.save_map(step=step)
+                self.save_map(step=f'step_{step}')
             ant_xpos = self._ant.xpos()
             ant_ypos = self._ant.ypos()
             self._array[ant_ypos][ant_xpos] = self._ant.step(self._array[ant_ypos][ant_xpos])
@@ -172,4 +170,4 @@ class Map():
             directory = self._save_dir
         # converts to '1' so less space is taken
         img = Image.fromarray(self._array, mode='L').convert(mode='1')
-        img.save(f'{directory}/step_{step}.png')
+        img.save(f'{directory}/{step}.png')

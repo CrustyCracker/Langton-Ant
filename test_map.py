@@ -9,7 +9,7 @@ def test_white_map_creation():
     width = '3'
     height = '3'
 
-    map = Map(width, height, 'only_white')
+    map = Map(width, height, 'white')
 
     assert map._array.shape == (3, 3)
     assert np.count_nonzero(map._array) == 9
@@ -19,14 +19,14 @@ def test_create_map_white_negative_number():
     width = '-3'
     height = '-37'
     with pytest.raises(SizeError):
-        map = Map(width, height, 'only_white')
+        map = Map(width, height, 'white')
 
 
 def test_create_map_white_NAN():
     width = '-3dawssd'
     height = '-3qwefds7'
     with pytest.raises(SizeError):
-        map = Map(width, height, 'only_white')
+        map = Map(width, height, 'white')
 
 
 
@@ -77,3 +77,10 @@ def test_create_map_from_photo_nonexistant():
     creator_code = 'from_photo'
     with pytest.raises(FileNotFoundError):
         map = Map(width, height, creator_code, 'w/e', img_path='nonexistant_PHOTO')
+
+def test_create_map_from_photo_directory_nonexistant():
+    width = '10'
+    height = '10'
+    creator_code = 'from_photo'
+    with pytest.raises(FileNotFoundError):
+        map = Map(width, height, creator_code, 'cracker/roads/road1/road', img_path='cracker/CrackerHappy.png')

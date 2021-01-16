@@ -117,7 +117,7 @@ class Langton_Ant():
             if self.direction() == 'right':
                 return 'up'
         else:
-            raise Exception('something is not yes with _new_direction()')
+            raise Exception('_new_direction() is not working')
 
     def _new_direction_random(self, illegal_directions=[]):
         '''Returns a random direction that is legal
