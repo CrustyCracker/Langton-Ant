@@ -4,6 +4,7 @@ from random import randrange
 from ant import Langton_Ant
 import os
 
+
 class ProcentageError(Exception):
     '''ProcentageError occurs when the user inputs odds
     that isn't an element of set [0, 100].
@@ -12,7 +13,7 @@ class ProcentageError(Exception):
     '''
     def __init__(self, percentage):
         self.percentage = percentage
-        msg = f'the percantage of black square appearing cannot be equal to {percentage}%'
+        msg = f'The percantage of black square appearing cannot be equal to {percentage}%'
         super().__init__(msg)
 
 
@@ -24,7 +25,7 @@ class StepValueError(Exception):
     '''
     def __init__(self, user_string):
         self.user_string = user_string
-        msg = f'the number of steps cannot be equal to {user_string}'
+        msg = f'The number of steps cannot be equal to {user_string}'
         super().__init__(msg)
 
 
@@ -58,26 +59,24 @@ class Map():
     -width
     -height
     -creator_code - to determine how the arrey should be built
-    can only be
     -save_dir - directory which to save the map images
     -odds_of_black - odds of black sqare, if creator_code='random'
-    -img_path - path of the image to convert
+    -img_path - relative path to the image
     '''
 
-    _creator_codes = ['from_photo', 'white', 'random']
+    _creator_codes = ['from_image', 'white', 'random']
 
     def __init__(
         self,
         width,
         height,
         creator_code,
-        save_dir='map_photos',
+        save_dir='',
         odds_of_black=None,
         img_path=None
     ):
-        # TODO 2 more map creators: random and from photo(done)
-        # TODO change the paths???
-        if creator_code == 'from_photo':
+
+        if creator_code == 'from_image':
             self._array = self._create_map_from_image(img_path)
             self._height, self._width = self._array.shape
         else:
@@ -104,7 +103,12 @@ class Map():
         if creator_code not in self._creator_codes:
             raise CreatorCodeError(creator_code)
 
+    def array(self):
+        return self._array
+
     def set_save_directory(self, save_dir):
+        if save_dir == '':
+            save_dir = "map_photos"
         self._create_directory(save_dir)
         self._save_dir = save_dir
 
@@ -115,7 +119,7 @@ class Map():
         parent_dir = os.getcwd()
         path = os.path.join(parent_dir, save_dir)
         try:
-            os.mkdir(path)
+            os.makedirs(path)
         except FileExistsError:
             filelist = [file for file in os.listdir(path) if file.endswith('.png')]
             for file in filelist:
@@ -139,10 +143,7 @@ class Map():
         return randrange(100) < odds_of_black
 
     def _create_map_from_image(self, path):
-        '''Yes, this looks odd, but there are some problems
-        with creating images form the '1' mode, so I decided to use
-        'L' mode, to do so, the program has to perform this operation
-        (see below). It just works.
+        '''Creates array from an image of a given path relative to this module
         '''
         with Image.open(f'{path}') as image:
             function = lambda x: 255 if x > 122 else 0

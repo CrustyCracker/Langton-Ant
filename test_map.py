@@ -11,8 +11,8 @@ def test_white_map_creation():
 
     map = Map(width, height, 'white')
 
-    assert map._array.shape == (3, 3)
-    assert np.count_nonzero(map._array) == 9
+    assert map.array().shape == (3, 3)
+    assert np.count_nonzero(map.array()) == 9
 
 
 def test_create_map_white_negative_number():
@@ -29,14 +29,13 @@ def test_create_map_white_NAN():
         map = Map(width, height, 'white')
 
 
-
 def test_create_map_random_zero_odds():
     width = '10'
     height = '10'
     creator_code = 'random'
     odds = '0'
     map = Map(width, height, creator_code, odds_of_black=odds)
-    assert np.count_nonzero(map._array) == 100
+    assert np.count_nonzero(map.array()) == 100
 
 
 def test_create_map_random_100_black():
@@ -45,7 +44,8 @@ def test_create_map_random_100_black():
     creator_code = 'random'
     odds = '100'
     map = Map(width, height, creator_code, odds_of_black=odds)
-    assert np.count_nonzero(map._array) == 0
+    assert np.count_nonzero(map.array()) == 0
+
 
 def test_create_map_random_NAN():
     width = '10'
@@ -55,6 +55,7 @@ def test_create_map_random_NAN():
     with pytest.raises(ProcentageError):
         map = Map(width, height, creator_code, odds_of_black=odds)
 
+
 def test_create_map_random_negative_number():
     width = '10'
     height = '10'
@@ -62,6 +63,7 @@ def test_create_map_random_negative_number():
     odds = '-125'
     with pytest.raises(ProcentageError):
         map = Map(width, height, creator_code, odds_of_black=odds)
+
 
 def test_create_map_random_too_high():
     width = '10'
@@ -71,16 +73,11 @@ def test_create_map_random_too_high():
     with pytest.raises(ProcentageError):
         map = Map(width, height, creator_code, odds_of_black=odds)
 
+
 def test_create_map_from_photo_nonexistant():
     width = '10'
     height = '10'
-    creator_code = 'from_photo'
+    creator_code = 'from_image'
     with pytest.raises(FileNotFoundError):
-        map = Map(width, height, creator_code, 'w/e', img_path='nonexistant_PHOTO')
+        map = Map(width, height, creator_code, '', img_path='nonexistant_PHOTO')
 
-def test_create_map_from_photo_directory_nonexistant():
-    width = '10'
-    height = '10'
-    creator_code = 'from_photo'
-    with pytest.raises(FileNotFoundError):
-        map = Map(width, height, creator_code, 'cracker/roads/road1/road', img_path='cracker/CrackerHappy.png')

@@ -1,0 +1,1 @@
+Every "jump" is equal to 1000000 steps

@@ -1,8 +1,8 @@
 from random import choice
 
-class DirectionError(Exception):
-    def __init__(self, direction):
-        super().__init__(f'{direction} is not a legal direction in a 2d plane')
+# class DirectionError(Exception):
+#     def __init__(self, direction):
+#         super().__init__(f'{direction} is not a legal direction in a 2d plane')
 
 class Langton_Ant():
     '''Ant class, Atributes:
@@ -10,7 +10,7 @@ class Langton_Ant():
     -map_height- int
     -xpos- ants x-axis position on the map
     -ypos- ants y-axis position on the map
-    -direction: 0-up, 1-right, 2-down, 3-left
+    -direction: up, right, down, left
     '''
 
     colors = {"black": 0, "white": 255}
@@ -56,8 +56,8 @@ class Langton_Ant():
         self._xpos -= 1
 
     def step(self, color):
-        '''Returns the value of a color that the map will take
-        checks
+        '''Returns the value of a color that the square of the map
+        will rake
         '''
         if self.map_height() == 1 and self.map_width() == 1:
             if color == self.colors['black']:
@@ -107,7 +107,7 @@ class Langton_Ant():
                 return 'left'
             if self.direction() == 'left':
                 return 'up'
-        elif color == self.colors['white']:
+        if color == self.colors['white']:
             if self.direction() == 'up':
                 return 'left'
             if self.direction() == 'left':
@@ -116,8 +116,7 @@ class Langton_Ant():
                 return 'right'
             if self.direction() == 'right':
                 return 'up'
-        else:
-            raise Exception('_new_direction() is not working')
+
 
     def _new_direction_random(self, illegal_directions=[]):
         '''Returns a random direction that is legal
