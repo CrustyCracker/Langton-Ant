@@ -106,6 +106,9 @@ class Map():
     def array(self):
         return self._array
 
+    def save_dir(self):
+        return self._save_dir
+
     def set_save_directory(self, save_dir):
         if save_dir == '':
             save_dir = "map_photos"

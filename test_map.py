@@ -81,3 +81,15 @@ def test_create_map_from_photo_nonexistant():
     with pytest.raises(FileNotFoundError):
         map = Map(width, height, creator_code, '', img_path='nonexistant_PHOTO')
 
+
+def test_set_save_directory():
+    width = '10'
+    height = '10'
+    creator_code = 'white'
+    map = Map(width, height, creator_code, save_dir='')
+    assert map.save_dir() == 'map_photos'
+    map.set_save_directory('map_photos/1')
+    assert map.save_dir() == 'map_photos/1'
+
+
+
