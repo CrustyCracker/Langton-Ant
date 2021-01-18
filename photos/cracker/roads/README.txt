@@ -1,0 +1,1 @@
+For this skippy road, ant takes 700000 steps between every skip

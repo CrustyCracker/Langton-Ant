@@ -3,13 +3,13 @@ from ant import Langton_Ant
 
 def main():
 
-    save_dir = 'map_photos'
+    save_dir = 'photos/default_directory'
     odds_of_black = None
     img_path = None
     width = None
     height = None
 
-    print("Langtons Ant photo creator")
+    print("Welcome to LangtonAntor 3000")
     print("Choose how to create your map")
 
     while True:
@@ -29,7 +29,7 @@ def main():
             width = input("> ")
             print("map height:")
             height = input("> ")
-            print("Odds of black squares(from 0 to 100 inclusive)")
+            print("Odds of black squares(from 0% to 100% inclusive)")
             odds_of_black = input('> ').strip('%')
         elif creator_code_number == '3':
             creator_code = "from_image"
@@ -66,7 +66,7 @@ def main():
                 print("Restarting the program")
                 continue
         else:
-            print("TIME SKIP MODE")
+            print("TIMESKIP MODE")
             print('The program will save every image of the map after each time skip')
             print('How many steps will the ant take between every time skip?')
             steps = input('> ')
@@ -75,7 +75,7 @@ def main():
             try:
                 skips = abs(int(float(skips)))
             except Exception:
-                print("The given value of skips is not convetable to an int")
+                print("The given value of skips is not convetable to an integer")
                 print("10 skips will occur instead")
                 skips = 10
             print('This might take a while')
