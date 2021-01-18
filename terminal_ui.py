@@ -46,12 +46,9 @@ def main():
         print("Save Folder(relative to this module):")
         save_dir = input("> ").strip()
 
-        print('Save every step? Y/n')
+        print('Do you want to save every step? Y/n')
         save_every_step = input('> ').strip().lower()
 
-        if save_every_step != "n":
-            print('Number of steps:')
-            steps = input("> ")
         try:
             map = Map(width, height, creator_code, save_dir, odds_of_black, img_path)
         except Exception as e:
@@ -60,34 +57,37 @@ def main():
             continue
 
         if save_every_step != 'n':
+            print('Number of steps:')
+            steps = input("> ")
             try:
                 map.ants_journey(steps)
             except Exception as e:
                 print(e)
                 print("Restarting the program")
                 continue
-
         else:
-            print("'Sandbox' Mode")
-            print('The program will save images of the map after n steps')
-            print('Type STOP to stop the program')
-            map.save_map(save_dir, f'jump_0')
-            jumps = 1
-            while True:
-                try:
-                    print("How many steps to take?(type STOP to stop the program)")
-                    value = input('> ')
-                    if value.lower().strip() == 'stop':
-                        break
-                    steps = int(float(value))
-                    print('Wait!')
+            print("TIME SKIP MODE")
+            print('The program will save every image of the map after each time skip')
+            print('How many steps will the ant take between every time skip?')
+            steps = input('> ')
+            print('How many time skips will occur?')
+            skips = input('> ')
+            try:
+                skips = abs(int(float(skips)))
+            except Exception:
+                print("The given value of skips is not convetable to an int")
+                print("10 skips will occur instead")
+                skips = 10
+            print('This might take a while')
+            try:
+                for skip in range(0, skips+1):
+                    map.save_map(save_dir, f'skip_{skip}')
                     map.ants_journey(steps, save_every_step=False)
-                    map.save_map(save_dir, f'jump_{jumps}')
-                    jumps += 1
-                except Exception:
-                    print('unsupported input, try again')
-                    continue
-
+            except Exception as e:
+                print(e)
+                print("Restarting the program")
+                continue
+        print('DONE!')
         print(f'The images are saved in {save_dir}')
         break
 

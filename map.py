@@ -43,9 +43,9 @@ class SizeError(Exception):
 
 
 class CreatorCodeError(Exception):
-    '''CreatorCodeError, occurs when a unsupported creator_code is given
+    '''CreatorCodeError, occurs when an unsupported creator_code is given
     when creating a new instance of the map class
-    attributes:
+    Attributes:
     creator_code- code that was given when creating a new instance of map class
     '''
     def __init__(self, creator_code):
@@ -65,6 +65,7 @@ class Map():
     '''
 
     _creator_codes = ['from_image', 'white', 'random']
+    colors = {"black": 0, "white": 255, 'gray': 120}
 
     def __init__(
         self,
@@ -110,8 +111,10 @@ class Map():
         return self._save_dir
 
     def set_save_directory(self, save_dir):
+        '''Sets map images save directory to a given save_dir
+        '''
         if save_dir == '':
-            save_dir = "map_photos"
+            save_dir = 'photos/default_directory'
         self._create_directory(save_dir)
         self._save_dir = save_dir
 
@@ -129,33 +132,47 @@ class Map():
                 os.remove(os.path.join(path, file))
 
     def _create_map_white(self):
+        '''Returmns a 2D numpy array filled with self.colors['white'] values
+        '''
         shape = (self._height, self._width)
-        array = np.full(shape, fill_value=255, dtype=np.dtype('uint8'))
+        array = np.full(shape, fill_value=self.colors['white'], dtype=np.dtype('uint8'))
         return array
 
     def _create_map_random(self, odds_of_black):
+        '''Returns a 2D numpy array filled with
+        self.colors['white'] or self.colors['black'] values
+        odds of zero appearing are equal to the odds_of_black
+        '''
         shape = (self._height, self._width)
-        array = np.full(shape, fill_value=255, dtype=np.dtype('uint8'))
+        array = np.full(shape, fill_value=self.colors['white'], dtype=np.dtype('uint8'))
         for ypos in range(self._height):
             for xpos in range(self._width):
                 if self._random_bool(odds_of_black):
-                    array[ypos][xpos] = 0
+                    array[ypos][xpos] = self.colors['black']
         return array
 
-    def _random_bool(self, odds_of_black):
-        return randrange(100) < odds_of_black
+    def _random_bool(self, odds):
+        '''Returns random bool value, percentage of returning True
+        are equal to the odds argument
+        '''
+        return randrange(100) < odds
 
     def _create_map_from_image(self, path):
-        '''Creates array from an image of a given path relative to this module
+        '''Converts an image to a 2D numpy array
+        filled with self.colors['black'] or self.colors['white'] values
         '''
         with Image.open(f'{path}') as image:
-            function = lambda x: 255 if x > 122 else 0
+            function = lambda x: self.colors['white'] if x > self.colors['gray'] else self.colors['black']
             image = image.convert('L').point(function, mode='1')
             image = image.convert('L')
             array = np.array(image)
             return array
 
     def ants_journey(self, steps, save_every_step=True):
+        '''Method responsible for communication with the ant
+        The ant will take x steps and change the values in the maps
+        numpy 2D array; change the value of self._array attribute
+        '''
         try:
             steps = abs(int(float(steps)))
         except Exception:
@@ -172,6 +189,6 @@ class Map():
         '''
         if not directory:
             directory = self._save_dir
-        # converts to '1' so less space is taken
-        img = Image.fromarray(self._array, mode='L').convert(mode='1')
+        # converts to '1' so less space is taken(not much, but still)
+        img = Image.fromarray(self._array, mode='L')
         img.save(f'{directory}/{step}.png')

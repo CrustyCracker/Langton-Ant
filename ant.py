@@ -1,8 +1,5 @@
 from random import choice
 
-# class DirectionError(Exception):
-#     def __init__(self, direction):
-#         super().__init__(f'{direction} is not a legal direction in a 2d plane')
 
 class Langton_Ant():
     '''Ant class, Atributes:
@@ -56,8 +53,10 @@ class Langton_Ant():
         self._xpos -= 1
 
     def step(self, color):
-        '''Returns the value of a color that the square of the map
-        will rake
+        '''Changes ants direction to a legal one and makes the ant
+        take a step in that direction.
+        Returns the value of a color that the square of the map
+        will take.
         '''
         if self.map_height() == 1 and self.map_width() == 1:
             if color == self.colors['black']:
@@ -86,6 +85,9 @@ class Langton_Ant():
             self._go_left()
 
     def _get_illegal_directions(self):
+        '''Returns a list of illegal directions that would make the
+        ant go off the map
+        '''
         illegal_directions = []
         if self.xpos() == 0:
             illegal_directions.append('left')
@@ -98,6 +100,9 @@ class Langton_Ant():
         return illegal_directions
 
     def _new_direction(self, color):
+        '''changes ants' direction depending on the color of
+        the square that the ant is on
+        '''
         if color == self.colors['black']:
             if self.direction() == 'up':
                 return 'right'
@@ -120,7 +125,7 @@ class Langton_Ant():
 
     def _new_direction_random(self, illegal_directions=[]):
         '''Returns a random direction that is legal
-        list of illegal directions as the argument
+        Takes a list of illegal directions as the argument
         '''
         legal_directions = ['up', 'right', 'down', 'left']
         if not illegal_directions == []:

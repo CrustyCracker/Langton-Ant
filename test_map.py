@@ -1,7 +1,5 @@
 from map import Map, SizeError, ProcentageError
-from ant import Langton_Ant
 import numpy as np
-from PIL import Image
 import pytest
 
 
@@ -73,6 +71,14 @@ def test_create_map_random_too_high():
     with pytest.raises(ProcentageError):
         map = Map(width, height, creator_code, odds_of_black=odds)
 
+def test_create_map_from_photo():
+    width = None
+    height = None
+    creator_code = 'from_image'
+    img_path = 'photos/cracker/CrackerHappy.png'
+
+    map = Map(width, height, creator_code, img_path=img_path)
+    assert map.array().shape == (450, 450)
 
 def test_create_map_from_photo_nonexistant():
     width = '10'
@@ -87,9 +93,6 @@ def test_set_save_directory():
     height = '10'
     creator_code = 'white'
     map = Map(width, height, creator_code, save_dir='')
-    assert map.save_dir() == 'map_photos'
-    map.set_save_directory('map_photos/1')
-    assert map.save_dir() == 'map_photos/1'
-
-
-
+    assert map.save_dir() == 'photos/default_directory'
+    map.set_save_directory('photos/default_directory/test1')
+    assert map.save_dir() == 'photos/default_directory/test1'
