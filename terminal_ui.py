@@ -1,5 +1,5 @@
 from map import Map
-from ant import Langton_Ant
+
 
 def main():
 
@@ -9,7 +9,7 @@ def main():
     width = None
     height = None
 
-    print("Welcome to LangtonAntor 3000")
+    print("Welcome to LangtonAntor")
     print("Choose how to create your map")
 
     while True:
@@ -90,7 +90,6 @@ def main():
         print('Done!')
         print(f'The images are saved in {save_dir}')
         break
-
 
 
 if __name__ == '__main__':

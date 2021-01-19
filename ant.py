@@ -123,7 +123,6 @@ class Langton_Ant():
             if self.direction() == 'right':
                 return 'up'
 
-
     def _new_direction_random(self, illegal_directions=[]):
         '''Returns a random direction that is legal
         Takes a list of illegal directions as the argument
