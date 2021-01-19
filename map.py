@@ -88,8 +88,10 @@ class Map():
                     raise SizeError(width, height)
             except Exception:
                 raise SizeError(width, height)
+
         if creator_code == 'white':
             self._array = self._create_map_white()
+
         if creator_code == 'random':
             try:
                 self._odds_of_black = int(float(odds_of_black))
@@ -101,6 +103,7 @@ class Map():
 
         self._ant = Langton_Ant(self._width, self._height)
         self.set_save_directory(save_dir)
+
         if creator_code not in self._creator_codes:
             raise CreatorCodeError(creator_code)
 
@@ -170,8 +173,8 @@ class Map():
 
     def ants_journey(self, steps, save_every_step=True):
         '''Method responsible for communication with the ant
-        The ant will take x steps and change the values in the maps
-        numpy 2D array; change the value of self._array attribute
+        The ant will take x steps and change the values in the
+        2D numpy array array; change the value of self._array attribute
         '''
         try:
             steps = abs(int(float(steps)))
@@ -179,16 +182,18 @@ class Map():
             raise StepValueError(steps)
         for step in range(0, steps+1):
             if save_every_step:
-                self.save_map(step=f'step_{step}')
+                self.save_map(image_name=f'step_{step}')
             ant_xpos = self._ant.xpos()
             ant_ypos = self._ant.ypos()
             self._array[ant_ypos][ant_xpos] = self._ant.step(self._array[ant_ypos][ant_xpos])
 
-    def save_map(self, directory=None, step=None):
+    def save_map(self, directory=None, image_name="map_image"):
         '''Saves current map to a given directory
+        if directory is not specified, the save directory
+        is taken from maps self._save_dir attribute
         '''
         if not directory:
             directory = self._save_dir
         # converts to '1' so less space is taken(not much, but still)
         img = Image.fromarray(self._array, mode='L')
-        img.save(f'{directory}/{step}.png')
+        img.save(f'{directory}/{image_name}.png')

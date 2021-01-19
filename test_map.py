@@ -1,4 +1,4 @@
-from map import Map, SizeError, ProcentageError
+from map import Map, SizeError, ProcentageError, StepValueError, CreatorCodeError
 import numpy as np
 import pytest
 
@@ -11,6 +11,13 @@ def test_white_map_creation():
 
     assert map.array().shape == (3, 3)
     assert np.count_nonzero(map.array()) == 9
+
+
+def test_create_map_white_negative_number():
+    width = '11'
+    height = '11'
+    with pytest.raises(CreatorCodeError):
+        map = Map(width, height, 'unsupported code')
 
 
 def test_create_map_white_negative_number():
@@ -96,3 +103,29 @@ def test_set_save_directory():
     assert map.save_dir() == 'photos/default_directory'
     map.set_save_directory('photos/default_directory/test1')
     assert map.save_dir() == 'photos/default_directory/test1'
+
+
+def test_ants_journey():
+    width = '3'
+    height = '3'
+
+    map = Map(width, height, 'white')
+
+    assert map.array().shape == (3, 3)
+    assert np.count_nonzero(map.array()) == 9
+    map.ants_journey(1, False)
+    assert map.array()[1][1] == 0
+
+
+def test_ants_journey_unconvertible_number_of_steps():
+    width = '3'
+    height = '3'
+
+    map = Map(width, height, 'white')
+
+    assert map.array().shape == (3, 3)
+    assert np.count_nonzero(map.array()) == 9
+    map.ants_journey('1', False)
+    assert map.array()[1][1] == 0
+    with pytest.raises(StepValueError):
+        map.ants_journey('unconvertible', False)

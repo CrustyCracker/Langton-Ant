@@ -87,7 +87,7 @@ def main():
                 print(e)
                 print("Restarting the program")
                 continue
-        print('DONE!')
+        print('Done!')
         print(f'The images are saved in {save_dir}')
         break
 

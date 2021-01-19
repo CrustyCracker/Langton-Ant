@@ -69,6 +69,7 @@ class Langton_Ant():
         if self.direction() in illegal_directions:
             self.set_direction(self._new_direction_random(illegal_directions))
         self._change_pos()
+
         if color == self.colors["black"]:
             return self.colors["white"]
         if color == self.colors["white"]:
