@@ -3,11 +3,11 @@ from random import choice
 
 class Langton_Ant():
     '''Ant class, Atributes:
-    -map_width- ant has to know about maps width int
-    -map_height- int
-    -xpos- ants x-axis position on the map
-    -ypos- ants y-axis position on the map
-    -direction: up, right, down, left
+    -map_width- map width; int
+    -map_height- map height; int
+    -xpos- ants x-axis position on the map; int
+    -ypos- ants y-axis position on the map; int
+    -direction: up, right, down, left; string
     '''
 
     colors = {"black": 0, "white": 255}
